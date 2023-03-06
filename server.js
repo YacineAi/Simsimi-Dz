@@ -146,6 +146,7 @@ botly.on("postback", (senderId, message, postback, data, ref) => {
   }
 });
 ////// ADD-ONs /////
+/*
 botly.setGetStarted({pageId: "325798925020867", payload: "GET_STARTED"});
 botly.setGreetingText({
     pageId: "325798925020867",
@@ -160,5 +161,6 @@ botly.setGreetingText({
       }
     ]
   });
+  */
 ////// ADD-ONs //////
 app.listen(process.env.PORT || port, () => console.log(`App is on port : ${port}`));
