@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-require('dotenv').config();
 const bodyParser = require("body-parser");
 const Botly = require("botly");
 const botly = new Botly({
@@ -9,7 +8,7 @@ const botly = new Botly({
   verifyToken: process.env.VERIFY_TOKEN,
   webHookPath: process.env.WB_PATH,
   notificationType: Botly.CONST.REGULAR,
-  FB_URL: "https://graph.facebook.com/v12.0/"
+  FB_URL: "https://graph.facebook.com/v2.6/"
 });
 const { value } = require("pb-util");
 const { struct } = require("pb-util");
@@ -30,16 +29,13 @@ app.get("/", function(req, res) {
 });
 app.use(
   bodyParser.json({
-    verify: botly.getVerifySignature("b4406eade2033b5bb79995f439e84391")
+    verify: botly.getVerifySignature(process.env.APP_SECRET)
   })
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/webhook", botly.router());
 botly.on("message", (senderId, message, data) => {
 const sessionPath = sessionClient.sessionPath(projectId, senderId);
-botly.sendAction({id: senderId, action: Botly.CONST.ACTION_TYPES.MARK_SEEN});
-botly.sendAction({id: senderId, action: Botly.CONST.ACTION_TYPES.TYPING_ON});
-botly.sendAction({id: senderId, action: Botly.CONST.ACTION_TYPES.TYPING_OFF});
   if (message.message.text) {
     const request = {
     session: sessionPath,
@@ -143,9 +139,6 @@ botly.sendAction({id: senderId, action: Botly.CONST.ACTION_TYPES.TYPING_OFF});
     }
 });
 botly.on("postback", (senderId, message, postback, data, ref) => {
-botly.sendAction({id: senderId, action: Botly.CONST.ACTION_TYPES.MARK_SEEN});
-botly.sendAction({id: senderId, action: Botly.CONST.ACTION_TYPES.TYPING_ON});
-botly.sendAction({id: senderId, action: Botly.CONST.ACTION_TYPES.TYPING_OFF});
     if (postback = "GET_STARTED"){
       botly.sendText({id: senderId, text: "Welcome to Simsimi! 😻💜 Start chatting with me about anything you want... 😸🙈"});
   } else if (postback = ""){
